@@ -1,0 +1,78 @@
+<requests>
+  <node client_id="h1">
+    <services>
+	  <execute command="sudo apt-get update" shell="/bin/sh"/> 
+    </services>
+    <interface client_id="h1-s1">
+      <ip address="10.0.0.1" netmask="255.255.255.0" type="ipv4"/>      
+    </interface>	
+  </node>
+  
+  <node client_id="h2">
+    <services>
+      <execute command="sudo apt-get update" shell="/bin/sh"/>	
+      <execute command="sudo apt-get install -y imagemagick" shell="/bin/sh"/>
+    </services>
+    <interface client_id="h2-s2">
+      <ip address="10.0.0.2" netmask="255.255.255.0" type="ipv4"/>      
+    </interface>	
+  </node>
+  
+  <node client_id="h3">
+    <services>
+	  <execute command="sudo apt-get update" shell="/bin/sh"/>  
+	  <execute command="sudo apt-get install -y imagemagick" shell="/bin/sh"/>
+    </services>
+    <interface client_id="h3-s1">
+      <ip address="10.0.0.3" netmask="255.255.255.0" type="ipv4"/>      
+    </interface>	
+  </node>
+  
+  <q0 client_id="request-0">
+    <interface_ref client_id="s1-s2"/>
+    <interface_ref client_id="s2-s1"/>	
+	<property source_id="s1-s2" dest_id="s2-s1" capacity="50000"/>
+    <property source_id="s2-s1" dest_id="s1-s2" capacity="50000"/>
+    <property delay="50000"/>   
+  </q1>
+  
+  <q1 client_id="request-1">    
+    <interface_ref client_id="s1-s3"/>
+    <interface_ref client_id="s3-s1"/>	
+	<property source_id="s1-s3" dest_id="s3-s1" capacity="50000"/>
+    <property source_id="s3-s1" dest_id="s1-s3" capacity="50000"/>
+    <property delay="50000"/> 
+  </q2>
+  
+  <q2 client_id="request-2">    
+    <interface_ref client_id="s3-s2"/>
+    <interface_ref client_id="s2-s3"/>	
+	<property source_id="s3-s2" dest_id="s2-s3" capacity="40000"/>
+    <property source_id="s2-s3" dest_id="s3-s2" capacity="40000"/>
+    <property delay="10000"/>   
+  </q3>
+  
+  <q3 client_id="request-3">    
+    <interface_ref client_id="s1-h1"/>
+    <interface_ref client_id="h1-s1"/>	
+	<property source_id="s1-h1" dest_id="h1-s1" capacity="100000"/>
+    <property source_id="h1-s1" dest_id="s1-h1" capacity="100000"/>
+    <property delay="100000"/>     
+  </q4>
+  
+  <q4 client_id="request-4">    
+    <interface_ref client_id="s1-h3"/>
+    <interface_ref client_id="h3-s1"/>	
+	<property source_id="s1-h3" dest_id="h3-s1" capacity="100000"/>
+    <property source_id="h3-s1" dest_id="s1-h3" capacity="100000"/>
+    <property delay="500000"/>    
+  </q5>
+  
+  <q5 client_id="request-5">    
+    <interface_ref client_id="h2-s2"/>
+    <interface_ref client_id="s2-h2"/>	
+	<property source_id="s2-h2" dest_id="h2-s2" capacity="100000"/>
+    <property source_id="h2-s2" dest_id="s2-h2" capacity="100000"/>
+    <property delay="50000"/>
+  </q5>  
+ <\requests>

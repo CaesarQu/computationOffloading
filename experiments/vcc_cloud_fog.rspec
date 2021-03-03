@@ -1,0 +1,180 @@
+<rspec xmlns="http://www.geni.net/resources/rspec/3" xmlns:emulab="http://www.protogeni.net/resources/rspec/ext/emulab/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.geni.net/resources/rspec/3    http://www.geni.net/resources/rspec/3/request.xsd" type="request">
+
+  <node client_id="s1">
+    <sliver_type name="emulab-xen">
+      <disk_image name="urn:publicid:IDN+utahddc.geniracks.net+image+emulab-ops:Ubuntu12-64-OVS"/>
+    </sliver_type>
+	<services>
+      <execute command="sudo ovs-vsctl add-br br0" shell="/bin/sh"/>
+      <execute command="sudo ovs-vsctl set Bridge br0 other-config:datapath-id=0000000000000001" shell="/bin/sh"/>      
+      <execute command="sudo ifconfig eth1 0" shell="/bin/sh"/>
+	  <execute command="sudo ifconfig eth2 0" shell="/bin/sh"/>
+	  <execute command="sudo ifconfig eth3 0" shell="/bin/sh"/>
+	  <execute command="sudo ifconfig eth4 0" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl add-port br0 eth1" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl add-port br0 eth2" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl add-port br0 eth3" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl add-port br0 eth4" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl set-controller br0 tcp:127.0.0.1:6653" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl set-fail-mode br0 secure" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl -- set Port eth1 qos=@newqos -- set Port eth2 qos=@newqos -- set Port eth3 qos=@newqos -- set Port eth4 qos=@newqos -- --id=@newqos create QoS type=linux-htb other-config:max-rate=100000000 queues=1=@q1,2=@q2,3=@q3,4=@q4,5=@q5 -- --id=@q1 create Queue other-config:min-rate=10000000 other-config:max-rate=10000000 -- --id=@q2 create Queue other-config:min-rate=20000000 other-config:max-rate=20000000  -- --id=@q3 create Queue other-config:min-rate=30000000 other-config:max-rate=30000000 -- --id=@q4 create Queue other-config:min-rate=40000000 other-config:max-rate=40000000 -- --id=@q5 create Queue other-config:min-rate=50000000 other-config:max-rate=50000000" shell="/bin/sh"/>
+      <!-- comment 4 netem lines below if you wish to use real transmission delays by applying GENI stitching, i.e., use different AMs for cloud (h1,h3,s1), fog (h2,s2) and transmission node (s3) -->
+      <execute command="sudo tc qdisc del dev eth1 root" shell="/bin/sh"/>
+      <execute command="sudo tc qdisc add dev eth1 root netem delay 5ms" shell="/bin/sh"/>
+      <execute command="sudo tc qdisc del dev eth2 root" shell="/bin/sh"/>
+      <execute command="sudo tc qdisc add dev eth2 root netem delay 5ms" shell="/bin/sh"/>
+    </services>
+    <interface client_id="s1-s2">
+    </interface>
+    <interface client_id="s1-s3">
+    </interface>
+    <interface client_id="s1-h1">
+    </interface>
+	<interface client_id="s1-h3">
+    </interface>	
+  </node>
+  
+  <node client_id="s2">
+	<sliver_type name="emulab-xen">
+      <disk_image name="urn:publicid:IDN+utahddc.geniracks.net+image+emulab-ops:Ubuntu12-64-OVS"/>
+    </sliver_type>
+	<services>
+      <execute command="sudo ovs-vsctl add-br br0" shell="/bin/sh"/>
+      <execute command="sudo ovs-vsctl set Bridge br0 other-config:datapath-id=0000000000000002" shell="/bin/sh"/>
+      <execute command="sudo ifconfig eth1 0" shell="/bin/sh"/>
+	  <execute command="sudo ifconfig eth2 0" shell="/bin/sh"/>
+	  <execute command="sudo ifconfig eth3 0" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl add-port br0 eth1" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl add-port br0 eth2" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl add-port br0 eth3" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl set-controller br0 tcp:127.0.0.1:6653" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl set-fail-mode br0 secure" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl -- set Port eth1 qos=@newqos -- set Port eth2 qos=@newqos -- set Port eth3 qos=@newqos -- --id=@newqos create QoS type=linux-htb other-config:max-rate=100000000 queues=1=@q1,2=@q2,3=@q3,4=@q4,5=@q5 -- --id=@q1 create Queue other-config:min-rate=10000000 other-config:max-rate=10000000 -- --id=@q2 create Queue other-config:min-rate=20000000 other-config:max-rate=20000000  -- --id=@q3 create Queue other-config:min-rate=30000000 other-config:max-rate=30000000 -- --id=@q4 create Queue other-config:min-rate=40000000 other-config:max-rate=40000000 -- --id=@q5 create Queue other-config:min-rate=50000000 other-config:max-rate=50000000" shell="/bin/sh"/>
+      <!-- comment 4 netem lines below if you wish to use real transmission delays by applying GENI stitching, i.e., use different AMs for cloud (h1,h3,s1), fog (h2,s2) and transmission node (s3) -->
+      <execute command="sudo tc qdisc del dev eth1 root" shell="/bin/sh"/>
+      <execute command="sudo tc qdisc add dev eth1 root netem delay 5ms" shell="/bin/sh"/>
+      <execute command="sudo tc qdisc del dev eth2 root" shell="/bin/sh"/>
+      <execute command="sudo tc qdisc add dev eth2 root netem delay 5ms" shell="/bin/sh"/>
+    </services>
+    <interface client_id="s2-s1">
+    </interface>
+    <interface client_id="s2-s3">
+    </interface>
+    <interface client_id="s2-h2">
+	</interface>	
+  </node>
+  
+  <node client_id="s3">
+	<sliver_type name="emulab-xen">
+      <disk_image name="urn:publicid:IDN+utahddc.geniracks.net+image+emulab-ops:Ubuntu12-64-OVS"/>
+    </sliver_type>
+	<services>
+      <execute command="sudo ovs-vsctl add-br br0" shell="/bin/sh"/>
+      <execute command="sudo ovs-vsctl set Bridge br0 other-config:datapath-id=0000000000000003" shell="/bin/sh"/>
+	  <execute command="sudo ifconfig eth1 0" shell="/bin/sh"/>
+	  <execute command="sudo ifconfig eth2 0" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl add-port br0 eth1" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl add-port br0 eth2" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl set-controller br0 tcp:127.0.0.1:6653" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl set-fail-mode br0 secure" shell="/bin/sh"/>
+	  <execute command="sudo ovs-vsctl -- set Port eth1 qos=@newqos -- set Port eth2 qos=@newqos -- --id=@newqos create QoS type=linux-htb other-config:max-rate=100000000 queues=1=@q1,2=@q2,3=@q3,4=@q4,5=@q5 -- --id=@q1 create Queue other-config:min-rate=10000000 other-config:max-rate=10000000 -- --id=@q2 create Queue other-config:min-rate=20000000 other-config:max-rate=20000000  -- --id=@q3 create Queue other-config:min-rate=30000000 other-config:max-rate=30000000 -- --id=@q4 create Queue other-config:min-rate=40000000 other-config:max-rate=40000000 -- --id=@q5 create Queue other-config:min-rate=50000000 other-config:max-rate=50000000" shell="/bin/sh"/>
+      <!-- comment 4 netem lines below if you wish to use real transmission delays by applying GENI stitching, i.e., use different AMs for cloud (h1,h3,s1), fog (h2,s2) and transmission node (s3) -->
+      <execute command="sudo tc qdisc del dev eth1 root" shell="/bin/sh"/>
+      <execute command="sudo tc qdisc add dev eth1 root netem delay 5ms" shell="/bin/sh"/>
+      <execute command="sudo tc qdisc del dev eth2 root" shell="/bin/sh"/>
+      <execute command="sudo tc qdisc add dev eth2 root netem delay 5ms" shell="/bin/sh"/>
+    </services>
+    <interface client_id="s3-s1">
+    </interface>
+    <interface client_id="s3-s2">
+    </interface>	
+  </node>
+
+  <node client_id="h1">
+    <sliver_type xmlns="http://www.geni.net/resources/rspec/3" name="emulab-xen">
+	  <disk_image xmlns="http://www.geni.net/resources/rspec/3" name="urn:publicid:IDN+instageni.wisc.edu+image+ch-geni-net:LOFTv3" url="https://www.instageni.wisc.edu/image_metadata.php?uuid=3e25a369-ea5b-11e6-993a-000000000000"/>
+      <emulab:xen cores="4" ram="4096" disk="15"/>
+    </sliver_type>
+    <services>
+	  <execute command="sudo apt-get update" shell="/bin/sh"/> 
+    </services>
+    <interface client_id="h1-s1">
+      <ip address="10.0.0.1" netmask="255.255.255.0" type="ipv4"/>      
+    </interface>	
+  </node>
+  
+  <node client_id="h2">
+    <sliver_type xmlns="http://www.geni.net/resources/rspec/3" name="emulab-xen">      
+      <emulab:xen cores="2" ram="2048" disk="15"/>
+    </sliver_type>
+    <services>
+      <execute command="sudo apt-get update" shell="/bin/sh"/>
+      <execute command="sudo apt-get install iperf" shell="/bin/sh"/>	
+      <execute command="sudo apt-get install -y imagemagick" shell="/bin/sh"/>
+    </services>
+    <interface client_id="h2-s2">
+      <ip address="10.0.0.2" netmask="255.255.255.0" type="ipv4"/>      
+    </interface>	
+  </node>
+  
+  <node client_id="h3">
+    <sliver_type xmlns="http://www.geni.net/resources/rspec/3" name="emulab-xen">     
+      <emulab:xen cores="1" ram="1024" disk="15"/>
+    </sliver_type>
+    <services>
+	  <execute command="sudo apt-get update" shell="/bin/sh"/>
+      <execute command="sudo apt-get install iperf" shell="/bin/sh"/>      
+    </services>
+    <interface client_id="h3-s1">
+      <ip address="10.0.0.3" netmask="255.255.255.0" type="ipv4"/>      
+    </interface>	
+  </node>
+  
+  <link client_id="link-0">
+    <interface_ref client_id="s1-s2"/>
+    <interface_ref client_id="s2-s1"/>	
+	<property source_id="s1-s2" dest_id="s2-s1" capacity="50000"/>
+    <property source_id="s2-s1" dest_id="s1-s2" capacity="50000"/>
+    <link_type name="lan"/>    
+  </link>
+  
+  <link client_id="link-1">    
+    <interface_ref client_id="s1-s3"/>
+    <interface_ref client_id="s3-s1"/>	
+	<property source_id="s1-s3" dest_id="s3-s1" capacity="50000"/>
+    <property source_id="s3-s1" dest_id="s1-s3" capacity="50000"/>
+    <link_type name="lan"/>
+  </link>
+  
+  <link client_id="link-2">    
+    <interface_ref client_id="s3-s2"/>
+    <interface_ref client_id="s2-s3"/>	
+	<property source_id="s3-s2" dest_id="s2-s3" capacity="40000"/>
+    <property source_id="s2-s3" dest_id="s3-s2" capacity="40000"/>
+    <link_type name="lan"/>    
+  </link>
+  
+  <link client_id="link-3">    
+    <interface_ref client_id="s1-h1"/>
+    <interface_ref client_id="h1-s1"/>	
+	<property source_id="s1-h1" dest_id="h1-s1" capacity="100000"/>
+    <property source_id="h1-s1" dest_id="s1-h1" capacity="100000"/>
+    <link_type name="lan"/>    
+  </link>
+  
+  <link client_id="link-4">    
+    <interface_ref client_id="s1-h3"/>
+    <interface_ref client_id="h3-s1"/>	
+	<property source_id="s1-h3" dest_id="h3-s1" capacity="100000"/>
+    <property source_id="h3-s1" dest_id="s1-h3" capacity="100000"/>
+    <link_type name="lan"/>    
+  </link>
+  
+  <link client_id="link-5">    
+    <interface_ref client_id="h2-s2"/>
+    <interface_ref client_id="s2-h2"/>	
+	<property source_id="s2-h2" dest_id="h2-s2" capacity="100000"/>
+    <property source_id="h2-s2" dest_id="s2-h2" capacity="100000"/>
+    <link_type name="lan"/>
+  </link>  
+</rspec>

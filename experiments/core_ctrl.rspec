@@ -1,0 +1,13 @@
+<rspec xmlns="http://www.geni.net/resources/rspec/3" xmlns:emulab="http://www.protogeni.net/resources/rspec/ext/emulab/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.geni.net/resources/rspec/3    http://www.geni.net/resources/rspec/3/request.xsd" type="request">
+  <node client_id="core">
+    <sliver_type xmlns="http://www.geni.net/resources/rspec/3" name="emulab-xen">
+      <disk_image xmlns="http://www.geni.net/resources/rspec/3" name="urn:publicid:IDN+instageni.rnet.missouri.edu+image+ch-geni-net:DhiyoCoreCntrl" url="https://www.instageni.rnet.missouri.edu/image_metadata.php?uuid=c1f1def9-5998-11e9-97f1-000099989701"/>
+      <emulab:xen cores="4" ram="4096" disk="15"/>
+    </sliver_type>
+    <services>
+	  <execute command="sudo apt-get update" shell="/bin/sh"/> 
+    </services>
+    <icon xmlns="http://www.protogeni.net/resources/rspec/ext/jacks/1" url="https://github.com/GENI-NSF/geni-tutorials/raw/master/GRAPHICS/of-ctrl.png"/>
+    <routable_control_ip xmlns="http://www.protogeni.net/resources/rspec/ext/emulab/1"/>
+  </node>
+</rspec>

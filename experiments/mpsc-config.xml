@@ -1,0 +1,22 @@
+<mpsc-config>
+    <!--ratio between queue id and bw, i.e. queue id=1 and ratio=5 mean queue supports 5 Mbps max rate-->
+    <queue_id_bw_ratio val="20"/>
+    <!--max bw for host-to-switch links-->
+    <max_host_to_switch_bw val="100"/>
+    <!--max bw for switch-to-switch links-->
+    <max_switch_to_switch_bw val="100"/>
+    <!--idle timeout (sec) of the flow, i.e., how long flow will remain in table since last matching before be deleted-->
+    <flow_idle_timeout val="0"/>
+    <!--hard timeout (sec) of the flow, i.e., how long flow will remain in table before be deleted (last matching does not matter)-->
+    <flow_hard_timeout val="600"/>
+    <!--if true VL embedding results will be export to cvs file-->
+	<export_results val="false"/>
+    <!--if true physical graph discovery service will read main physical resource properties (e.g., capacity or latency)
+    from xml config each time upon cache update or just once otherwise-->
+    <dynamic_graph val="true"/>
+    <!--if true available bandwidth will be estimated as difference beteween allocated vls bw and its capacity
+    or using statistics service otherwise-->
+    <enable_qos val="false"/>
+    <!--set IP of the centralized controller - 127.0.0.1 by default-->
+    <core_ctrl_ip val="128.206.119.49"/>
+</mpsc-config>
